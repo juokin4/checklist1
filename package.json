@@ -1,0 +1,16 @@
+{
+  "name": "legal-checklist",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Legal checklist web app with basic auth API.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.3",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

@@ -8,6 +8,101 @@ body {
     background-color: #eef1f5;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f172a;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e2e8f0;
+}
+
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    padding: 20px;
+}
+
+.auth-overlay.active {
+    display: flex;
+}
+
+.auth-card {
+    width: min(420px, 100%);
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-card h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.auth-card p {
+    margin: 0 0 4px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.auth-card input {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5f5;
+    font-size: 14px;
+}
+
+.auth-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.auth-status {
+    font-size: 12px;
+    color: #0f172a;
+    min-height: 16px;
+}
+
+.subscription-card {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.subscription-card h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.subscription-status {
+    font-weight: 600;
+    color: #14532d;
+}
+
+
 /* =========================================================
    2) HEADER
    ========================================================= */
@@ -130,6 +225,35 @@ body.dark {
 
 body.dark header {
     background-color: #0f172a;
+}
+
+body.dark .user-info {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark .auth-card {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark .auth-card p {
+    color: #cbd5f5;
+}
+
+body.dark .auth-card input {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+body.dark .subscription-card {
+    background: #0f172a;
+    border-color: #1f2937;
+}
+
+body.dark .subscription-status {
+    color: #22c55e;
 }
 
 /* Checklist arka planı değişebilir ama yazı SİYAH kalacak */

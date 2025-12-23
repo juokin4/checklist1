@@ -212,13 +212,17 @@
             <p>Dava türünü seç, maddeleri tikle, süreci sistematik takip et.</p>
         </div>
 
-        <button id="darkToggle" class="pill-button" type="button">
-            <span class="icon">🌙</span>
-            <span>Dark mode</span>
-        </button>
+        <div class="header-actions">
+            <div class="user-info" id="userInfo">Misafir</div>
+            <button id="btnLogout" class="pill-button" type="button">Çıkış yap</button>
+            <button id="darkToggle" class="pill-button" type="button">
+                <span class="icon">🌙</span>
+                <span>Dark mode</span>
+            </button>
+        </div>
     </header>
 
-    <div class="layout">
+    <div class="layout" id="appContent">
 
         <!-- Sol Panel -->
         <section class="card">
@@ -255,6 +259,12 @@
                     <div id="progressBarInner" class="progress-bar-inner"></div>
                 </div>
             </div>
+
+            <div class="subscription-card">
+                <h3>💳 Plan Durumu</h3>
+                <p>Aktif plan durumun:</p>
+                <div id="subscriptionStatus" class="subscription-status">Bilinmiyor</div>
+            </div>
         </section>
 
         <!-- Sağ Panel -->
@@ -268,6 +278,22 @@
                 <div class="empty-state">Soldan bir dava türü seçtiğinde checklist burada görünecek.</div>
             </div>
         </section>
+    </div>
+</div>
+
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-card">
+        <h2>Hesap ile giriş</h2>
+        <p>Checklist'i kullanmak için giriş yapın veya kayıt olun.</p>
+        <label for="authEmail">E-posta</label>
+        <input type="email" id="authEmail" placeholder="ornek@mail.com">
+        <label for="authPassword">Şifre</label>
+        <input type="password" id="authPassword" placeholder="En az 8 karakter">
+        <div class="auth-actions">
+            <button id="btnLogin" class="btn btn-primary" type="button">Giriş yap</button>
+            <button id="btnRegister" class="btn btn-outline" type="button">Kayıt ol</button>
+        </div>
+        <div id="authStatus" class="auth-status"></div>
     </div>
 </div>
 

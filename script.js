@@ -1319,6 +1319,16 @@ const btnClearAll = document.getElementById("btnClearAll");
 
 const progressLabel = document.getElementById("progressLabel");
 const progressBarInner = document.getElementById("progressBarInner");
+const authOverlay = document.getElementById("authOverlay");
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const btnLogin = document.getElementById("btnLogin");
+const btnRegister = document.getElementById("btnRegister");
+const btnLogout = document.getElementById("btnLogout");
+const userInfo = document.getElementById("userInfo");
+const appContent = document.getElementById("appContent");
+const authStatus = document.getElementById("authStatus");
+const subscriptionStatus = document.getElementById("subscriptionStatus");
 
 
 // --------------------------------------------
@@ -1334,6 +1344,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     loadDarkMode();
+    initializeAuth();
 });
 
 
@@ -1461,6 +1472,119 @@ checklistContainer.addEventListener("change", () => {
     saveChecklistState();
     updateProgress();
 });
+
+// --------------------------------------------
+// 7️⃣ Auth (E-posta giriş)
+// --------------------------------------------
+function setAuthState(email, token) {
+    if (token) {
+        localStorage.setItem("auth_token", token);
+    }
+    userInfo.textContent = email || "Misafir";
+    authOverlay.classList.remove("active");
+    appContent.style.filter = "none";
+    appContent.style.pointerEvents = "auto";
+    btnLogout.style.display = "inline-flex";
+    authStatus.textContent = "";
+    fetchSubscription();
+}
+
+function clearAuthState() {
+    localStorage.removeItem("auth_token");
+    userInfo.textContent = "Misafir";
+    authOverlay.classList.add("active");
+    appContent.style.filter = "blur(2px)";
+    appContent.style.pointerEvents = "none";
+    btnLogout.style.display = "none";
+    subscriptionStatus.textContent = "Bilinmiyor";
+}
+
+async function verifySession() {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+        clearAuthState();
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/session", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            clearAuthState();
+            return;
+        }
+
+        const data = await response.json();
+        setAuthState(data.email);
+    } catch (error) {
+        clearAuthState();
+    }
+}
+
+async function submitAuth(endpoint) {
+    authStatus.textContent = "İşlem yapılıyor...";
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
+
+    try {
+        const response = await fetch(`/api/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            authStatus.textContent = data.error || "Bir hata oluştu.";
+            return;
+        }
+
+        setAuthState(data.email, data.token);
+    } catch (error) {
+        authStatus.textContent = "Sunucuya ulaşılamadı.";
+    }
+}
+
+function initializeAuth() {
+    appContent.style.filter = "blur(2px)";
+    appContent.style.pointerEvents = "none";
+    btnLogout.style.display = "none";
+    verifySession();
+}
+
+btnLogin.addEventListener("click", () => submitAuth("login"));
+btnRegister.addEventListener("click", () => submitAuth("register"));
+btnLogout.addEventListener("click", () => clearAuthState());
+
+async function fetchSubscription() {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+        subscriptionStatus.textContent = "Bilinmiyor";
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/subscription", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            subscriptionStatus.textContent = "Bilinmiyor";
+            return;
+        }
+
+        const data = await response.json();
+        subscriptionStatus.textContent = data.status === "trial" ? "Deneme" : data.status;
+    } catch (error) {
+        subscriptionStatus.textContent = "Bilinmiyor";
+    }
+}
 // --------------------------------------------
 // 7️⃣ Dark Mode Kaydet & Yükle
 // --------------------------------------------
