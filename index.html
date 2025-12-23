@@ -220,6 +220,74 @@
 
     <div class="layout">
 
+        <section class="card auth-card">
+            <div class="auth-header">
+                <div>
+                    <h2>🔐 Hesap <span class="auth-pill">Yeni</span></h2>
+                    <p>Giriş yaparak checklist verilerini farklı cihazlarda senkronize edebilirsin.</p>
+                </div>
+                <div class="auth-status">
+                    <span id="authStatus">Oturum kapalı.</span>
+                    <button id="logoutButton" class="btn btn-outline" type="button">Çıkış yap</button>
+                </div>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab is-active" type="button" data-tab="login">Giriş</button>
+                <button class="auth-tab" type="button" data-tab="register">Kayıt Ol</button>
+            </div>
+
+            <div class="auth-panels">
+                <form id="loginForm" class="auth-panel is-active">
+                    <div>
+                        <label for="loginEmail">E-posta</label>
+                        <input id="loginEmail" name="email" type="text" autocomplete="email" required>
+                    </div>
+                    <div>
+                        <label for="loginPassword">Şifre</label>
+                        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Giriş yap</button>
+                </form>
+
+                <form id="registerForm" class="auth-panel">
+                    <div>
+                        <label for="registerEmail">E-posta</label>
+                        <input id="registerEmail" name="email" type="text" autocomplete="email" required>
+                    </div>
+                    <div>
+                        <label for="registerPassword">Şifre</label>
+                        <input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="8" required>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Kayıt ol</button>
+                </form>
+            </div>
+
+            <div class="auth-helpers">
+                <details>
+                    <summary>E-posta doğrulama</summary>
+                    <form id="verifyEmailForm" class="auth-inline-form">
+                        <input id="verifyToken" name="token" type="text" placeholder="Doğrulama tokenı" required>
+                        <button class="btn btn-outline" type="submit">Doğrula</button>
+                    </form>
+                </details>
+                <details>
+                    <summary>Şifre sıfırlama</summary>
+                    <form id="resetRequestForm" class="auth-inline-form">
+                        <input id="resetEmail" name="email" type="text" placeholder="E-posta adresin" required>
+                        <button class="btn btn-outline" type="submit">Sıfırlama linki iste</button>
+                    </form>
+                    <form id="resetPasswordForm" class="auth-inline-form">
+                        <input id="resetToken" name="token" type="text" placeholder="Sıfırlama tokenı" required>
+                        <input id="resetPassword" name="password" type="password" placeholder="Yeni şifre" minlength="8" required>
+                        <button class="btn btn-outline" type="submit">Şifreyi güncelle</button>
+                    </form>
+                </details>
+            </div>
+
+            <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
+        </section>
+
         <!-- Sol Panel -->
         <section class="card">
             <h2>📂 Dava türü</h2>
