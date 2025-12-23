@@ -1476,3 +1476,199 @@ function loadDarkMode() {
         document.body.classList.add("dark");
     }
 }
+
+// --------------------------------------------
+// 8️⃣ Auth (JWT tabanlı)
+// --------------------------------------------
+const API_BASE = "/api/auth";
+const authMessage = document.getElementById("authMessage");
+const authStatus = document.getElementById("authStatus");
+const logoutButton = document.getElementById("logoutButton");
+
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const verifyEmailForm = document.getElementById("verifyEmailForm");
+const resetRequestForm = document.getElementById("resetRequestForm");
+const resetPasswordForm = document.getElementById("resetPasswordForm");
+
+const authTabs = document.querySelectorAll(".auth-tab");
+const authPanels = document.querySelectorAll(".auth-panel");
+
+function setAuthMessage(message, type = "") {
+    if (!authMessage) return;
+    authMessage.textContent = message;
+    authMessage.classList.remove("is-error", "is-success");
+    if (type) authMessage.classList.add(type);
+}
+
+function setAuthState({ token, email }) {
+    if (token) {
+        localStorage.setItem("auth_token", token);
+        localStorage.setItem("auth_email", email);
+    } else {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_email");
+    }
+    updateAuthStatus();
+}
+
+function updateAuthStatus() {
+    if (!authStatus || !logoutButton) return;
+    const storedEmail = localStorage.getItem("auth_email");
+    if (storedEmail) {
+        authStatus.textContent = `Oturum açık: ${storedEmail}`;
+        logoutButton.disabled = false;
+    } else {
+        authStatus.textContent = "Oturum kapalı.";
+        logoutButton.disabled = true;
+    }
+}
+
+async function apiRequest(path, options = {}) {
+    const storedToken = localStorage.getItem("auth_token");
+    const response = await fetch(path, {
+        headers: {
+            "Content-Type": "application/json",
+            ...(storedToken ? { Authorization: `Bearer ${storedToken}` } : {}),
+            ...(options.headers || {})
+        },
+        ...options
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw new Error(data.error || "İşlem başarısız oldu.");
+    }
+    return data;
+}
+
+authTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+        authTabs.forEach((btn) => btn.classList.remove("is-active"));
+        authPanels.forEach((panel) => panel.classList.remove("is-active"));
+        tab.classList.add("is-active");
+        const panel = document.getElementById(`${tab.dataset.tab}Form`);
+        if (panel) panel.classList.add("is-active");
+    });
+});
+
+if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setAuthMessage("");
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+            const data = await apiRequest(`${API_BASE}/login`, {
+                method: "POST",
+                body: JSON.stringify({ email, password })
+            });
+            setAuthState({ token: data.token, email: data.email });
+            setAuthMessage("Giriş başarılı.", "is-success");
+        } catch (error) {
+            setAuthMessage(error.message, "is-error");
+        }
+    });
+}
+
+if (registerForm) {
+    registerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setAuthMessage("");
+        const email = document.getElementById("registerEmail").value.trim();
+        const password = document.getElementById("registerPassword").value;
+
+        try {
+            const data = await apiRequest(`${API_BASE}/register`, {
+                method: "POST",
+                body: JSON.stringify({ email, password })
+            });
+            setAuthMessage(`Kayıt alındı. ${data.notice || "E-posta doğrulaması gerekli."}`, "is-success");
+        } catch (error) {
+            setAuthMessage(error.message, "is-error");
+        }
+    });
+}
+
+if (verifyEmailForm) {
+    verifyEmailForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setAuthMessage("");
+        const token = document.getElementById("verifyToken").value.trim();
+
+        try {
+            await apiRequest(`${API_BASE}/verify-email`, {
+                method: "POST",
+                body: JSON.stringify({ token })
+            });
+            setAuthMessage("E-posta doğrulandı. Şimdi giriş yapabilirsiniz.", "is-success");
+        } catch (error) {
+            setAuthMessage(error.message, "is-error");
+        }
+    });
+}
+
+if (resetRequestForm) {
+    resetRequestForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setAuthMessage("");
+        const email = document.getElementById("resetEmail").value.trim();
+
+        try {
+            const data = await apiRequest(`${API_BASE}/request-password-reset`, {
+                method: "POST",
+                body: JSON.stringify({ email })
+            });
+            setAuthMessage(data.notice || "Sıfırlama talebi alındı.", "is-success");
+        } catch (error) {
+            setAuthMessage(error.message, "is-error");
+        }
+    });
+}
+
+if (resetPasswordForm) {
+    resetPasswordForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setAuthMessage("");
+        const token = document.getElementById("resetToken").value.trim();
+        const password = document.getElementById("resetPassword").value;
+
+        try {
+            await apiRequest(`${API_BASE}/reset-password`, {
+                method: "POST",
+                body: JSON.stringify({ token, password })
+            });
+            setAuthMessage("Şifre güncellendi. Yeni şifre ile giriş yapabilirsiniz.", "is-success");
+        } catch (error) {
+            setAuthMessage(error.message, "is-error");
+        }
+    });
+}
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+        setAuthState({ token: null, email: null });
+        setAuthMessage("Oturum kapatıldı.", "is-success");
+    });
+}
+
+updateAuthStatus();
+
+const urlParams = new URLSearchParams(window.location.search);
+const verifyTokenParam = urlParams.get("verifyToken");
+const resetTokenParam = urlParams.get("resetToken");
+
+if (verifyTokenParam) {
+    const verifyInput = document.getElementById("verifyToken");
+    const verifyDetails = verifyEmailForm?.closest("details");
+    if (verifyInput) verifyInput.value = verifyTokenParam;
+    if (verifyDetails) verifyDetails.open = true;
+}
+
+if (resetTokenParam) {
+    const resetInput = document.getElementById("resetToken");
+    const resetDetails = resetPasswordForm?.closest("details");
+    if (resetInput) resetInput.value = resetTokenParam;
+    if (resetDetails) resetDetails.open = true;
+}

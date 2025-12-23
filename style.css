@@ -174,3 +174,155 @@ body.dark .check-item label {
 .progress-top span.value {
     color: #000000 !important;
 }
+
+/* =========================================================
+   9) AUTH KARTI
+   ========================================================= */
+.auth-card {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 2px solid #cbd5f5;
+    background: #f8fafc;
+}
+
+.auth-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.auth-header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 0.95em;
+}
+
+.auth-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: #1e3a8a;
+    color: #ffffff;
+    font-size: 0.75em;
+    font-weight: 600;
+}
+
+.auth-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95em;
+    background: #f8fafc;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.auth-tab {
+    border: 1px solid #cbd5f5;
+    border-radius: 999px;
+    background: #ffffff;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+.auth-tab.is-active {
+    background: #1e3a8a;
+    color: #ffffff;
+    border-color: #1e3a8a;
+}
+
+.auth-panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.auth-panel {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+.auth-panel.is-active {
+    display: flex;
+}
+
+.auth-panel input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+}
+
+.auth-helpers details {
+    margin-top: 8px;
+}
+
+.auth-helpers summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #1e3a8a;
+}
+
+.auth-inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.auth-inline-form input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.auth-message {
+    min-height: 20px;
+    font-size: 0.95em;
+    color: #0f172a;
+}
+
+.auth-message.is-error {
+    color: #b91c1c;
+}
+
+.auth-message.is-success {
+    color: #15803d;
+}
+
+body.dark .auth-status,
+body.dark .auth-panel {
+    background: #0f172a;
+    color: #e5e7eb;
+    border-color: #334155;
+}
+
+body.dark .auth-card {
+    background: #0b1220;
+    border-color: #1e293b;
+}
+
+body.dark .auth-panel input {
+    background: #020617;
+    color: #e5e7eb;
+    border-color: #334155;
+}
